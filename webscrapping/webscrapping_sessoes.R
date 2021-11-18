@@ -1,0 +1,68 @@
+library(rvest)      # web scrapping
+library(dplyr)      # manipular dados
+library(stringr)    # manipular os textos
+library(xml2)       # ler html
+library(jbkmisc)
+
+url_sessoes <- 'https://sapl.al.ro.leg.br/sessao/pesquisar-sessao?&data_inicio__year=2021&data_inicio__month=&data_inicio__day=&tipo='
+
+pagina <- read_html(url_sessoes)
+
+# numero de paginas
+num_paginas <- pagina %>% 
+  xml_find_all("//a[@class='page-link']") %>% 
+  xml_text() %>% 
+  str_clean() %>% 
+  str_extract_all('[0-9]', simplify = TRUE) %>% 
+  as.numeric() %>% 
+  max(na.rm = TRUE)
+  
+dados_sessoes <- tibble()
+
+for (i in 1:num_paginas) {
+  url <- str_replace('https://sapl.al.ro.leg.br/sessao/pesquisar-sessao?page=PAGE&&data_inicio__year=2021&data_inicio__month=&data_inicio__day=&tipo=',
+                     'PAGE', as.character(i))
+  pagina <- read_html(url)
+  
+  # total sessoes
+  nome_sessao <- xml_find_all(pagina, "//td//a") %>% 
+    xml_text() %>% 
+    str_subset(pattern = 'Ata', negate = TRUE) %>% 
+    str_remove(pattern = 'da.*') %>% 
+    str_trim()
+  
+  tipo_sessao <- nome_sessao %>% 
+    str_remove(pattern = paste0('[0-9].*', 'ª')) %>% 
+    str_trim() %>% 
+    str_replace_all(pattern = 'Sessão Legislativa Extraord.', replacement = 'Sessão Extraordinária')
+  
+  data_sessao <- xml_find_all(pagina, "//td") %>% 
+    xml_text() %>% 
+    jbkmisc::str_clean() %>% 
+    gsub(pattern = '.*Abertura: (.+) Legislatura.*', replacement = '\\1') %>% 
+    str_subset(pattern = 'Resultados', negate = TRUE)
+  
+  dados_iter <- tibble(nome_sessao, 
+                     tipo_sessao, 
+                     data_sessao)
+  
+  dados_sessoes <- bind_rows(dados_sessoes, dados_iter)
+}
+
+# PRÉ-PROCESSAMENTO DOS DADOS ----
+dados_sessoes$data_sessao <- gsub(' De ', '', dados_sessoes$data_sessao) %>% 
+  strptime(format = '%d %B %Y') 
+
+dados_sessoes <- dados_sessoes %>% 
+  mutate(mes = lubridate::month(data_sessao, label = TRUE),
+         ano = lubridate::year(data_sessao))
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,35 @@
+status	Grupo
+Aguardando A Inclusão Na Ordem Do Dia	3
+Aguardando Deliberação Do Poder Executivo	3
+Aguardando Emissão De Parecer Da Comissão	3
+Aguardando Promulgação Da Lei	3
+Norma Promulgada	1
+Para Emitir Parecer Sobre A Proposição	3
+Parecer Contrário Da Comissão De Mérito	2
+Parecer Da Ccjr Ou Da Cfo Pelo Arquivamento Da Proposição	2
+Parecer Favorável Da Comissão	3
+Parecer Favorável Da Comissão De Constituição E Justiça	3
+Parecer Pela Rejeição Do Veto	3
+Pedido De Vista Em Plenário	3
+Prazo Vencido Na Comissão	3
+Proposição Anexada À Outra Análoga Ou Conexa Mais Antiga	3
+Proposição Aprovada	1
+Proposição Aprovada Em 1º Turno	3
+Proposição Arquivada	2
+Proposição Autuada	3
+Proposição Autuada E Cumprindo Prazo De Pauta	3
+Proposição Com Veto Total	3
+Proposição Distribuída Às Comissões	3
+Proposição Inclusa Na Ordem Do Dia	3
+Proposição Prejudicada	2
+Proposição Rejeitada Pelo Plenário	2
+Proposição Retirada Pelo Autor	4
+Proposição Transformada Em Lei	1
+Proposição Transformada Em Lei Por Promulgação	1
+Sem Parecer Da Comissão	3
+Transformada Em Lei Com Veto Parcial	1
+Veto Autuado E Incluso Em Pauta	3
+Veto Sobre A Proposição Mantido	2
+Veto Sobre A Proposição Rejeitado	1
+Veto Total Ou Parcial Promulgado	1
+NA	NA
