@@ -127,7 +127,7 @@ ui <- tablerDashPage(
         fluidRow(
           tablerCard(
             width = 8,
-            title = 'Sessões realizadas por mês',
+            title = 'SessÃµes realizadas por mês',
             echarts4rOutput('sessoes_barplot')
           ),
           tablerCard(

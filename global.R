@@ -16,14 +16,17 @@ library(shinyWidgets)
 library(waiter)
 library(tablerDash)
 
-options(encoding = "UTF-8")
+options(encoding = "UTF-8",
+        jbkmisc.verbose = FALSE)
 #source('webscrapping_sessoes.R', local = TRUE)
 
 # LEITURA DOS DADOS ----
 
-# dados das matérias ----
+# dados das matÃ©rias ----
 agrupamento_status <- read.table('agrupamento_status.txt', sep = '\t', header = TRUE)
-sapl_data <- readRDS(url('https://github.com/caio-alero/painel_legislativo/blob/main/dados_sapl.rds?raw=TRUE'))
+sapl_data <- readRDS(dados)
+
+#readRDS(curl('https://github.com/caio-alero/painel_legislativo/raw/main/dados_sapl.rds'))
 
 sapl_data <- merge(sapl_data, agrupamento_status, by.y = 'status')
 sapl_data$Grupo <- recode_factor(as.factor(sapl_data$Grupo),

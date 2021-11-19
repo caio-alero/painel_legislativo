@@ -164,8 +164,8 @@ server <- function(input, output, session) {
   # 2.3 dados materias ----
   output$dados <- renderDT({
     sapl_data %>% 
-      filter(projeto %in% input$tipo,
-             ano_apresentacao %in% input$data) %>% 
+      # filter(projeto %in% input$tipo,
+      #        ano_apresentacao %in% input$data) %>% 
       select(num_projeto, autor, ementa, data, localizacao_atual, status) %>% 
       mutate(data = as.Date(data, '%d/%m/%y')) %>% 
       datatable(rownames = FALSE, 
