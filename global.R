@@ -23,7 +23,7 @@ options(encoding = "UTF-8")
 
 # dados das matérias ----
 agrupamento_status <- read.table('agrupamento_status.txt', sep = '\t', header = TRUE)
-sapl_data <- readRDS(url('https://github.com/caio-alero/analise_sapl/blob/main/dados_sapl.rds?raw=TRUE'))
+sapl_data <- readRDS(url('https://github.com/caio-alero/painel_legislativo/blob/main/dados_sapl.rds?raw=TRUE'))
 
 sapl_data <- merge(sapl_data, agrupamento_status, by.y = 'status')
 sapl_data$Grupo <- recode_factor(as.factor(sapl_data$Grupo),
