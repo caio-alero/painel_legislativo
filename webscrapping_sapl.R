@@ -144,9 +144,11 @@ sapl_scrap <- function(URL, uma_pagina = FALSE) {
 }
 
 tempo_inicial <- Sys.time()
-sapl2021 <- sapl_scrap(URL = str_replace_all(string = 'https://sapl.al.ro.leg.br/materia/pesquisar-materia?page=PAGE&tipo=&ementa=&numero=&numeracao__numero_materia=&numero_protocolo=&ano=&o=&tipo_listagem=1&tipo_origem_externa=&numero_origem_externa=&ano_origem_externa=&data_origem_externa_0=&data_origem_externa_1=&local_origem_externa=&data_apresentacao_0=01%2F01%2FAAAA&data_apresentacao_1=31%2F12%2FAAAA&data_publicacao_0=&data_publicacao_1=&autoria__autor=&autoria__primeiro_autor=unknown&autoria__autor__tipo=&autoria__autor__parlamentar_set__filiacao__partido=&relatoria__parlamentar_id=&em_tramitacao=&tramitacao__unidade_tramitacao_destino=&tramitacao__status=&materiaassunto__assunto=&indexacao=', 
-                                          pattern = 'AAAA', replacement = '2021'))
+sapl2017 <- sapl_scrap(URL = str_replace_all(string = 'https://sapl.al.ro.leg.br/materia/pesquisar-materia?page=PAGE&tipo=&ementa=&numero=&numeracao__numero_materia=&numero_protocolo=&ano=&o=&tipo_listagem=1&tipo_origem_externa=&numero_origem_externa=&ano_origem_externa=&data_origem_externa_0=&data_origem_externa_1=&local_origem_externa=&data_apresentacao_0=01%2F01%2FAAAA&data_apresentacao_1=31%2F12%2FAAAA&data_publicacao_0=&data_publicacao_1=&autoria__autor=&autoria__primeiro_autor=unknown&autoria__autor__tipo=&autoria__autor__parlamentar_set__filiacao__partido=&relatoria__parlamentar_id=&em_tramitacao=&tramitacao__unidade_tramitacao_destino=&tramitacao__status=&materiaassunto__assunto=&indexacao=', 
+                                          pattern = 'AAAA', replacement = '2017'))
 Sys.time() - tempo_inicial
+
+saveRDS(sapl2021, file = 'data/sapl2021.rds')
 
 sapl_data <- bind_rows(sapl2019, sapl2020, sapl2021)
 
@@ -175,5 +177,7 @@ sapl_data <- sapl_data %>%
          ano_apresentacao = as.character(substring(data_apresentacao, 7, 11)),
          num_projeto = str_trim(num_projeto, side = 'right'))
 
-saveRDS(sapl_data, file = 'dados_sapl.rds')
+
+
+saveRDS(sapl_data, file = 'sapl_data.rds')
 

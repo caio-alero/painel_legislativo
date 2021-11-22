@@ -22,13 +22,15 @@ options(encoding = "UTF-8",
 
 # LEITURA DOS DADOS ----
 
-# dados das matÃ©rias ----
-agrupamento_status <- read.table('agrupamento_status.txt', sep = '\t', header = TRUE)
-sapl_data <- readRDS(dados)
+# dados das materias ----
+agrupamento_status <- read.table('agrupamento_status.txt', sep = '\t', header = TRUE) %>% as_tibble()
+sapl_data <- readRDS('sapl_data.RDS')
+
+#inner_join(agrupamento_status, sapl_data, by = 'status')
 
 #readRDS(curl('https://github.com/caio-alero/painel_legislativo/raw/main/dados_sapl.rds'))
 
-sapl_data <- merge(sapl_data, agrupamento_status, by.y = 'status')
+sapl_data <- merge(sapl_data, agrupamento_status, by = 'status')
 sapl_data$Grupo <- recode_factor(as.factor(sapl_data$Grupo),
                                  '1' = 'Proposição Aprovada',
                                  '2' = 'Proposição Rejeitada',
