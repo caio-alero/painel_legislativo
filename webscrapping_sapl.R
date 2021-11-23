@@ -144,24 +144,15 @@ sapl_scrap <- function(URL, uma_pagina = FALSE) {
 }
 
 tempo_inicial <- Sys.time()
-sapl2017 <- sapl_scrap(URL = str_replace_all(string = 'https://sapl.al.ro.leg.br/materia/pesquisar-materia?page=PAGE&tipo=&ementa=&numero=&numeracao__numero_materia=&numero_protocolo=&ano=&o=&tipo_listagem=1&tipo_origem_externa=&numero_origem_externa=&ano_origem_externa=&data_origem_externa_0=&data_origem_externa_1=&local_origem_externa=&data_apresentacao_0=01%2F01%2FAAAA&data_apresentacao_1=31%2F12%2FAAAA&data_publicacao_0=&data_publicacao_1=&autoria__autor=&autoria__primeiro_autor=unknown&autoria__autor__tipo=&autoria__autor__parlamentar_set__filiacao__partido=&relatoria__parlamentar_id=&em_tramitacao=&tramitacao__unidade_tramitacao_destino=&tramitacao__status=&materiaassunto__assunto=&indexacao=', 
-                                          pattern = 'AAAA', replacement = '2017'))
+sapl2016 <- sapl_scrap(URL = str_replace_all(string = 'https://sapl.al.ro.leg.br/materia/pesquisar-materia?page=PAGE&tipo=&ementa=&numero=&numeracao__numero_materia=&numero_protocolo=&ano=&o=&tipo_listagem=1&tipo_origem_externa=&numero_origem_externa=&ano_origem_externa=&data_origem_externa_0=&data_origem_externa_1=&local_origem_externa=&data_apresentacao_0=01%2F01%2FAAAA&data_apresentacao_1=31%2F12%2FAAAA&data_publicacao_0=&data_publicacao_1=&autoria__autor=&autoria__primeiro_autor=unknown&autoria__autor__tipo=&autoria__autor__parlamentar_set__filiacao__partido=&relatoria__parlamentar_id=&em_tramitacao=&tramitacao__unidade_tramitacao_destino=&tramitacao__status=&materiaassunto__assunto=&indexacao=', 
+                                          pattern = 'AAAA', replacement = '2016'))
 Sys.time() - tempo_inicial
 
 saveRDS(sapl2021, file = 'data/sapl2021.rds')
 
-list.files('https://github.com/caio-alero/painel_legislativo/tree/main/data/', pattern = '.rds') %>%
-  purrr::map_dfr(readRDS) %>% 
-  bind_rows()
+files <- list.files(path = 'data/', pattern = '.rds', full.names = TRUE)
+sapl_data <- do.call("bind_rows", lapply(files, readRDS))
 
-u <- str_replace('https://github.com/caio-alero/painel_legislativo/blob/main/data/saplANO.rds?raw=TRUE',
-            pattern = 'ANO', replacement = paste0(2017:2021)) 
-
-
-readRDS()
-Map(function(u, d) download.file(u, d, mode="wb"), urls, destinations)
-
-sapl_data <- bind_rows(sapl2019, sapl2020, sapl2021)
 
 # tratamento dos dados ----
 for(i in 1: nrow(sapl_data)) {
