@@ -132,7 +132,7 @@ sapl_scrap <- function(URL, uma_pagina = FALSE) {
   }
   
   
-  sapl_data <- tibble(num_projeto = unlist(num_projeto),
+  dados_ws <- tibble(num_projeto = unlist(num_projeto),
                       ementa = unlist(ementas),
                       data_apresentacao = unlist(data_apresentacao),
                       autor = unlist(autor),
@@ -140,46 +140,39 @@ sapl_scrap <- function(URL, uma_pagina = FALSE) {
                       status = unlist(status),
                       resultado = unlist(resultado))
   
-  return(sapl_data)
+  return(dados_ws)
 }
 
 tempo_inicial <- Sys.time()
-sapl2016 <- sapl_scrap(URL = str_replace_all(string = 'https://sapl.al.ro.leg.br/materia/pesquisar-materia?page=PAGE&tipo=&ementa=&numero=&numeracao__numero_materia=&numero_protocolo=&ano=&o=&tipo_listagem=1&tipo_origem_externa=&numero_origem_externa=&ano_origem_externa=&data_origem_externa_0=&data_origem_externa_1=&local_origem_externa=&data_apresentacao_0=01%2F01%2FAAAA&data_apresentacao_1=31%2F12%2FAAAA&data_publicacao_0=&data_publicacao_1=&autoria__autor=&autoria__primeiro_autor=unknown&autoria__autor__tipo=&autoria__autor__parlamentar_set__filiacao__partido=&relatoria__parlamentar_id=&em_tramitacao=&tramitacao__unidade_tramitacao_destino=&tramitacao__status=&materiaassunto__assunto=&indexacao=', 
-                                          pattern = 'AAAA', replacement = '2016'))
+dados_ws <- sapl_scrap(URL = str_replace_all(string = 'https://sapl.al.ro.leg.br/materia/pesquisar-materia?page=PAGE&tipo=&ementa=&numero=&numeracao__numero_materia=&numero_protocolo=&ano=&o=&tipo_listagem=1&tipo_origem_externa=&numero_origem_externa=&ano_origem_externa=&data_origem_externa_0=&data_origem_externa_1=&local_origem_externa=&data_apresentacao_0=01%2F01%2FAAAA&data_apresentacao_1=31%2F12%2FAAAA&data_publicacao_0=&data_publicacao_1=&autoria__autor=&autoria__primeiro_autor=unknown&autoria__autor__tipo=&autoria__autor__parlamentar_set__filiacao__partido=&relatoria__parlamentar_id=&em_tramitacao=&tramitacao__unidade_tramitacao_destino=&tramitacao__status=&materiaassunto__assunto=&indexacao=', 
+                                          pattern = 'AAAA', replacement = '2021'))
 Sys.time() - tempo_inicial
 
-saveRDS(sapl2021, file = 'data/sapl2021.rds')
-
-files <- list.files(path = 'data/', pattern = '.rds', full.names = TRUE)
-sapl_data <- do.call("bind_rows", lapply(files, readRDS))
-
-
 # tratamento dos dados ----
-for(i in 1: nrow(sapl_data)) {
-  if(grepl('PLO', as.character(sapl_data$num_projeto[i]), fixed = TRUE)) sapl_data$projeto[i] <- 'PLO' 
-  if(grepl('PLC', as.character(sapl_data$num_projeto[i]), fixed = TRUE)) sapl_data$projeto[i] <- 'PLC'
-  if(grepl('PRE', as.character(sapl_data$num_projeto[i]), fixed = TRUE)) sapl_data$projeto[i] <- 'PRE'
-  if(grepl('PEC', as.character(sapl_data$num_projeto[i]), fixed = TRUE)) sapl_data$projeto[i] <- 'PEC'
-  if(grepl('VT', as.character(sapl_data$num_projeto[i]), fixed = TRUE)) sapl_data$projeto[i] <- 'VT'
-  if(grepl('VP', as.character(sapl_data$num_projeto[i]), fixed = TRUE)) sapl_data$projeto[i] <- 'VP'
-  if(grepl('IND', as.character(sapl_data$num_projeto[i]), fixed = TRUE)) sapl_data$projeto[i] <- 'IND'
-  if(grepl('REQ', as.character(sapl_data$num_projeto[i]), fixed = TRUE)) sapl_data$projeto[i] <- 'REQ'
-  if(grepl('ECM', as.character(sapl_data$num_projeto[i]), fixed = TRUE)) sapl_data$projeto[i] <- 'ECM'
-  if(grepl('PDL', as.character(sapl_data$num_projeto[i]), fixed = TRUE)) sapl_data$projeto[i] <- 'PDL'
+for(i in 1: nrow(dados_ws)) {
+  if(grepl('PLO', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PLO' 
+  if(grepl('PLC', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PLC'
+  if(grepl('PRE', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PRE'
+  if(grepl('PEC', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PEC'
+  if(grepl('VT', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'VT'
+  if(grepl('VP', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'VP'
+  if(grepl('IND', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'IND'
+  if(grepl('REQ', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'REQ'
+  if(grepl('ECM', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'ECM'
+  if(grepl('PDL', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PDL'
+  if(grepl('CEDP', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'CEDP'
 }
 
-
-sapl_data$data <- gsub(' De ', '', sapl_data$data_apresentacao) %>% 
+dados_ws$data <- gsub(' De ', '', dados_ws$data_apresentacao) %>% 
   strptime(format = '%d %B %Y')
 
-sapl_data <- sapl_data %>% 
+dados_ws <- dados_ws %>% 
   mutate(num_projeto = gsub('\\-.*', '', num_projeto),
          data_apresentacao = format(lubridate::dmy(data_apresentacao), '%d/%m/%Y'),
          mes_apresentacao = lubridate::month(data_apresentacao, label = TRUE, abbr = TRUE),
          ano_apresentacao = as.character(substring(data_apresentacao, 7, 11)),
          num_projeto = str_trim(num_projeto, side = 'right'))
 
+saveRDS(dados_ws, file = 'data/sapl2021.rds')
 
-
-saveRDS(sapl_data, file = 'sapl_data.rds')
 

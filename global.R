@@ -23,8 +23,9 @@ options(encoding = "UTF-8",
 # LEITURA DOS DADOS ----
 
 # dados das materias ----
+files <- list.files(path = 'data/', pattern = '.rds', full.names = TRUE)
+sapl_data <- do.call("bind_rows", lapply(files, readRDS))
 agrupamento_status <- read.table('agrupamento_status.txt', sep = '\t', header = TRUE) %>% as_tibble()
-sapl_data <- readRDS('sapl_data.RDS')
 
 #inner_join(agrupamento_status, sapl_data, by = 'status')
 
