@@ -150,6 +150,17 @@ Sys.time() - tempo_inicial
 
 saveRDS(sapl2021, file = 'data/sapl2021.rds')
 
+list.files('https://github.com/caio-alero/painel_legislativo/tree/main/data/', pattern = '.rds') %>%
+  purrr::map_dfr(readRDS) %>% 
+  bind_rows()
+
+u <- str_replace('https://github.com/caio-alero/painel_legislativo/blob/main/data/saplANO.rds?raw=TRUE',
+            pattern = 'ANO', replacement = paste0(2017:2021)) 
+
+
+readRDS()
+Map(function(u, d) download.file(u, d, mode="wb"), urls, destinations)
+
 sapl_data <- bind_rows(sapl2019, sapl2020, sapl2021)
 
 # tratamento dos dados ----
