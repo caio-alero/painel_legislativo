@@ -35,10 +35,10 @@ server <- function(input, output, session) {
     
     fluidRow(
       #tablerStatCard(value = countup(value1$n, duration = 4), title = 'total de matérias'),
-      tablerStatCard(value = countup(value2$n, duration = 4), title = 'total de proposições'),
-      tablerStatCard(value = countup(value3$n, duration = 4), title = 'proposições aprovadas'),
-      tablerStatCard(value = countup(value4$n, duration = 4), title = 'proposições rejeitadas'),
-      tablerStatCard(value = countup(value5$n, duration = 4), title = 'em tramitação')
+      summaryBox(value = countup(value2$n, duration = 4), title = 'total de proposições'),
+      summaryBox(value = countup(value3$n, duration = 4), title = 'proposições aprovadas'),
+      summaryBox(value = countup(value4$n, duration = 4), title = 'proposições rejeitadas'),
+      summaryBox(value = countup(value5$n, duration = 4), title = 'em tramitação')
     )
     
   })
@@ -47,22 +47,41 @@ server <- function(input, output, session) {
   #e_common(font_family = 'Maiandra GD', theme = 'wonderland')
   
   output$materias_mes <- renderEcharts4r({
-    sapl_data %>%
+    # sapl_data %>%
+    #   filter(projeto %in% input$tipo,
+    #          ano_apresentacao %in% input$data) %>% 
+    #   mutate(mes_apresentacao = month(data, label = TRUE, abbr = FALSE)) %>% 
+    #   count(mes_apresentacao) %>% 
+    #   mutate(mes_apresentacao = as.character(mes_apresentacao)) %>% 
+    #   e_charts(x = mes_apresentacao) %>%
+    #   e_bar(n, emphasis = list(itemStyle = list(shadowBlur = 10)),
+    #         itemStyle = list(borderRadius = 5),
+    #         #barCategoryGap = '45%',
+    #         barGap = '0%') %>%
+    #   e_mark_point(data = list(type = 'max'), label = list(color = 'white')) %>%
+    #   e_tooltip(trigger = 'axis') %>%
+    #   e_x_axis(splitLine = list(show = FALSE)) %>% 
+    #   e_legend(show = FALSE) %>% 
+    #   e_theme('myTheme')
+    sapl_data %>% 
       filter(projeto %in% input$tipo,
-             ano_apresentacao %in% input$data) %>% 
-      mutate(mes_apresentacao = month(data, label = TRUE, abbr = FALSE)) %>% 
-      count(mes_apresentacao) %>% 
-      mutate(mes_apresentacao = as.character(mes_apresentacao)) %>% 
-      e_charts(x = mes_apresentacao) %>%
+             ano_apresentacao %in% input$data) %>%
+      count(ano_apresentacao) %>% 
+      mutate(cond = ifelse(ano_apresentacao == year(Sys.time()), 'blue', 'grey')) %>% 
+      group_by(cond) %>% 
+      e_charts(x = ano_apresentacao) %>% 
       e_bar(n, emphasis = list(itemStyle = list(shadowBlur = 10)),
-            itemStyle = list(borderRadius = 5),
-            #barCategoryGap = '45%',
-            barGap = '0%') %>%
-      e_mark_point(data = list(type = 'max'), label = list(color = 'white')) %>%
-      e_tooltip(trigger = 'axis') %>%
-      e_x_axis(splitLine = list(show = FALSE)) %>% 
+            itemStyle = list(borderRadius = 5), stack = TRUE) %>% 
+      e_tooltip(formatter = htmlwidgets::JS("
+                                        function(params)
+                                        {
+                                            return `<strong> ${params.value[0]} </strong>
+                                                    <br/> 
+                                                    Qtd. de matérias: ${params.value[1]}`
+                                        }  ")) %>% 
       e_legend(show = FALSE) %>% 
-      e_theme('myTheme')
+      e_theme('myTheme') %>% 
+      e_color(color = c('#0791b7', '#cccccc'))
   })
   output$materias_status <- renderEcharts4r({
     sapl_data %>% 
@@ -131,12 +150,12 @@ server <- function(input, output, session) {
       summarise(value = sum(value)) %>% 
       rename(name = poder)
     
-    tabela_autoria %>% 
-      group_by(poder) %>%
-      group_nest() %>%
+    tabela_poder %>% 
+      #group_by(poder) %>%
+      #group_nest() %>%
       mutate(value = tabela_poder$value) %>%
-      rename(name = poder,
-             children = data) %>%
+      # rename(name = poder,
+      #        children = data) %>%
       e_charts() %>% 
       e_treemap(itemStyle = list(borderColor = 'white',
                                  borderWidth = 0.3)) %>% 
@@ -167,7 +186,7 @@ server <- function(input, output, session) {
       # filter(projeto %in% input$tipo,
       #        ano_apresentacao %in% input$data) %>% 
       select(num_projeto, autor, ementa, data, localizacao_atual, status) %>% 
-      mutate(data = as.Date(data, '%d/%m/%y')) %>% 
+      #mutate(data = dmy(format(data, '%d/%m/%y'))) %>% 
       datatable(rownames = FALSE, 
                 style = 'bootstrap4',
                 options = list(paging = TRUE,
