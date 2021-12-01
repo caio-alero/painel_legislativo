@@ -35,10 +35,10 @@ server <- function(input, output, session) {
     
     fluidRow(
       #tablerStatCard(value = countup(value1$n, duration = 4), title = 'total de matérias'),
-      summaryBox(value = countup(value2$n, duration = 4), title = 'total de proposições'),
-      summaryBox(value = countup(value3$n, duration = 4), title = 'proposições aprovadas'),
-      summaryBox(value = countup(value4$n, duration = 4), title = 'proposições rejeitadas'),
-      summaryBox(value = countup(value5$n, duration = 4), title = 'em tramitação')
+      tablerStatCard(value = countup(value2$n, duration = 4), title = 'total de proposições'),
+      tablerStatCard(value = countup(value3$n, duration = 4), title = 'proposições aprovadas'),
+      tablerStatCard(value = countup(value4$n, duration = 4), title = 'proposições rejeitadas'),
+      tablerStatCard(value = countup(value5$n, duration = 4), title = 'em tramitação')
     )
     
   })

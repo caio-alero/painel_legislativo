@@ -15,10 +15,10 @@ Prazo Vencido Na Comissão	3
 Proposição Anexada À Outra Análoga Ou Conexa Mais Antiga	3
 Proposição Aprovada	1
 Proposição Aprovada Em 1º Turno	3
-Proposição Arquivada	2
+Proposição Arquivada	4
 Proposição Autuada	3
 Proposição Autuada E Cumprindo Prazo De Pauta	3
-Proposição Com Veto Total	3
+Proposição Com Veto Total	4
 Proposição Distribuída Às Comissões	3
 Proposição Inclusa Na Ordem Do Dia	3
 Proposição Prejudicada	2

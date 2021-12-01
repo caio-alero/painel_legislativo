@@ -63,6 +63,3 @@ dados_sessoes <- dados_sessoes %>%
 
 
 
-
-
-

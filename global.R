@@ -31,14 +31,15 @@ agrupamento_status <- read.table('agrupamento_status.txt', sep = '\t', header = 
 #readRDS(curl('https://github.com/caio-alero/painel_legislativo/raw/main/dados_sapl.rds'))
 
 sapl_data <- merge(sapl_data, agrupamento_status, by = 'status')
-sapl_data$Grupo <- recode_factor(as.factor(sapl_data$Grupo),
+sapl_data$Grupo <- as.character(recode_factor(as.factor(sapl_data$Grupo),
                                  '1' = 'Proposição Aprovada',
                                  '2' = 'Proposição Rejeitada',
                                  '3' = 'Em tramitação',
-                                 '4' = 'Proposição Retirada',
-                                 'NA' = 'NA')
+                                 '4' = 'Proposição Arquivada',
+                                 'NA' = 'NA'))
 
-sapl_data <- as_tibble(sapl_data)
+# sapl_data %>% 
+#   mutate(Grupo = ifelse(str_detect(localizacao_atual, 'Arquivo') & Grupo == 'Em tramitação', 'Proposição Arquivada', Grupo)) -> sapl_data
 
 source('webscrapping\\webscrapping_sessoes.R')
 source('analise_textual_sapl.R')

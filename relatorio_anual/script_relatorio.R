@@ -16,7 +16,7 @@ sapl_data$Grupo <- recode_factor(as.factor(sapl_data$Grupo),
                                  '1' = 'Proposição Aprovada',
                                  '2' = 'Proposição Rejeitada',
                                  '3' = 'Em tramitação',
-                                 '4' = 'Proposição Retirada',
+                                 '4' = 'Proposição Arquivada',
                                  'NA' = 'NA')
 
 sapl_data <- as_tibble(sapl_data)
@@ -62,3 +62,16 @@ sapl_data %>%
     text = element_text(size = 18, family = 'Bahnschrift')
   )
 dev.off()
+
+
+sapl_data %>% 
+  filter(ano_apresentacao == 2008) %>% 
+  count(projeto)
+
+
+dados_sessoes %>% 
+  count(tipo_sessao) %>% 
+  mutate(porc = round(n*100/sum(n), 1))
+
+
+
