@@ -4,6 +4,7 @@ library(ggplot2)
 library(bbplot)
 library(extrafont)
 library(ggsci)
+library(Hmisc)
 
 loadfonts(device = 'win')
 
@@ -65,8 +66,9 @@ dev.off()
 
 
 sapl_data %>% 
-  filter(ano_apresentacao == 2021) %>% 
-  count(projeto)
+  filter(ano_apresentacao == 2021,
+         projeto %nin% c('IND', 'REQ', 'VP', 'VT')) %>% 
+  count(projeto, Grupo)
 
 
 dados_sessoes %>% 
