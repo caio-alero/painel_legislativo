@@ -1,0 +1,14 @@
+name: painel_legislativo
+title: painel_legislativo
+username:
+account: alero
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5241992
+bundleId: 5316814
+url: https://alero.shinyapps.io/painel_legislativo/
+when: 1638402686.43192
+lastSyncTime: 1638402686.43192
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: agrupamento_status.xlsx|dados_sapl.rds|sapl_data.rds|testjpeg.jpg|webscrapping/comissoes_web_scrapping.R
