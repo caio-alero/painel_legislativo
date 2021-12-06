@@ -66,9 +66,7 @@ dev.off()
 
 
 sapl_data %>% 
-  filter(ano_apresentacao == 2021,
-         projeto %nin% c('IND', 'REQ', 'VP', 'VT')) %>% 
-  count(projeto, Grupo)
+  count(ano_apresentacao)
 
 
 dados_sessoes %>% 
