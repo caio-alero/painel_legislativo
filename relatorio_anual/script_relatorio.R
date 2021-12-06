@@ -66,6 +66,8 @@ dev.off()
 
 
 sapl_data %>% 
+  filter(ano_apresentacao == 2021,
+         mes_apresentacao == 'dez')
   count(ano_apresentacao)
 
 
