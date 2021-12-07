@@ -12,7 +12,7 @@ files <- list.files(path = 'data/', pattern = '.rds', full.names = TRUE)
 sapl_data <- do.call("bind_rows", lapply(files, readRDS)) 
 agrupamento_status <- read.table('agrupamento_status.txt', sep = '\t', header = TRUE) %>% as_tibble()
 
-sapl_data <- merge(sapl_data, agrupamento_status, by = 'status')
+inner_join(sapl_data, agrupamento_status, by = 'status')
 sapl_data$Grupo <- recode_factor(as.factor(sapl_data$Grupo),
                                  '1' = 'Proposição Aprovada',
                                  '2' = 'Proposição Rejeitada',
@@ -66,8 +66,7 @@ dev.off()
 
 
 sapl_data %>% 
-  filter(ano_apresentacao == 2021,
-         mes_apresentacao == 'dez')
+  filter(ano_apresentacao == 2021)
   count(ano_apresentacao)
 
 

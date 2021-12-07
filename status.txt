@@ -1,0 +1,41 @@
+status	n
+Aguardando A Inclusão Na Ordem Do Dia	45
+Aguardando Assinatura Do Autógrafo	2
+Aguardando Deliberação Do Poder Executivo	52
+Aguardando Emissão De Parecer Da Comissão	140
+Aguardando Promulgação Da Lei	1
+Aprovada A Redação Final	1
+Norma Promulgada	1454
+Para Emitir Parecer Sobre A Proposição	43
+Parecer Contrário Da Comissão De Mérito	5
+Parecer Da Ccjr Ou Da Cfo Pelo Arquivamento Da Proposição	309
+Parecer Favorável Da Comissão	120
+Parecer Favorável Da Comissão De Constituição E Justiça	40
+Parecer Pela Rejeição Do Veto	2
+Parecer Pelo Manutenção Do Veto	2
+Pedido De Vista Em Plenário	9
+Prazo Vencido Na Comissão	4
+Proposição Anexada À Outra Análoga Ou Conexa Mais Antiga	18
+Proposição Aprovada	270
+Proposição Aprovada Em 1º Turno	2
+Proposição Arquivada	525
+Proposição Autuada	2
+Proposição Autuada E Cumprindo Prazo De Pauta	30
+Proposição Com Veto Total	47
+Proposição Distribuída Às Comissões	12
+Proposição Inclusa Na Ordem Do Dia	16
+Proposição Prejudicada	25
+Proposição Rejeitada Pelo Plenário	30
+Proposição Retirada Da Ordem Do Dia	2
+Proposição Retirada Pelo Autor	247
+Proposição Transformada Em Lei	3560
+Proposição Transformada Em Lei Por Promulgação	274
+Sem Parecer Da Comissão	2
+Transformada Em Lei Com Veto Parcial	56
+Vai A Redação Final	1
+Veto Autuado E Incluso Em Pauta	2
+Veto Distribuido Para Emissão De Parecer	1
+Veto Sobre A Proposição Mantido	638
+Veto Sobre A Proposição Rejeitado	172
+Veto Total Ou Parcial Promulgado	126
+NA	18583
