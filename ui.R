@@ -5,35 +5,32 @@ spinner <- tagList(
 )
 
 # 1. UI ----
-ui <- tablerDashPage(
-  navbar = tablerDashNav(
-    id = 'mymenu',
-    navMenu = tablerNavMenu(
-      tablerNavMenuItem(
+ui <- tabler_page(
+  title = 'Painel Legislativo',
+  dark = FALSE,
+  tabler_navbar(
+    nav_menu = tabler_navbar_menu(
+      tabler_navbar_menu_item(
+        icon = icon('chart-bar'),
         tabName = 'tab1',
-        icon = "box",
-        'Proposições'
+        text = 'Proposições'
       ),
-      tablerNavMenuItem(
+      tabler_navbar_menu_item(
         tabName = 'tab2',
-        icon = "briefcase",
         'Pesquisa textual'
       ),
-      tablerNavMenuItem(
+      tabler_navbar_menu_item(
         tabName = 'tab3',
-        icon = "box",
         'Sessões'
       )
     )
   ),
-  footer = tablerDashFooter(),
-  title = "Painel Legislativo",
-  body = tablerDashBody(
+  tabler_body(
     useWaiter(),
     waiterShowOnLoad(spinner),
     e_theme_register('{"color":["#0791b7","#dad944","#cccccc", "#fb5057","#47c1ff","#f2b3c9"]}', name = "myTheme"),
-    tablerTabItems(
-      tablerTabItem(
+    tabler_tab_items(
+      tabler_tab_item(
         tabName = 'tab1',
         # 1.1 filtros ----
         fluidRow(
@@ -99,17 +96,17 @@ ui <- tablerDashPage(
           )
         ),
       ),
-      tablerTabItem(
+      tabler_tab_item(
         tabName = 'tab2',
         # 1.4 dados ui ----
-        fluidRow(
+        tabler_row(
           tablerCard(
             width = 12,
             title = 'Top 100 palavras mais utilizadas',
             echarts4rOutput('wordcloud')
           )
         ),
-        fluidRow(
+        tabler_row(
           tablerCard(
             width = 12,
             title = 'Dados',
@@ -122,7 +119,7 @@ ui <- tablerDashPage(
       ),
       
       
-      tablerTabItem(
+      tabler_tab_item(
         tabName = 'tab3',
         fluidRow(
           tablerCard(
@@ -145,6 +142,10 @@ ui <- tablerDashPage(
           )
         )
       )
+    ),
+    footer = tabler_footer(
+      left = "Rstats, 2020",
+      right = a(href = "https://www.google.com", "More")
     )
   )
 )

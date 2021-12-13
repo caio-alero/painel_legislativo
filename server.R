@@ -18,13 +18,13 @@ server <- function(input, output, session) {
     value3 <- sapl_data %>% 
       filter(ano_apresentacao %in% input$data,
              projeto %in% input$tipo,
-             Grupo == 'Proposição Aprovada')%>% 
+             Grupo == 'Aprovada')%>% 
       summarise(n = n())
     
     value4 <- sapl_data %>% 
       filter(ano_apresentacao %in% input$data,
              projeto %in% input$tipo,
-             Grupo == 'Proposição Rejeitada') %>% 
+             Grupo == 'Rejeitada') %>% 
       summarise(n = n())
       
     value5 <- sapl_data %>% 
@@ -88,6 +88,7 @@ server <- function(input, output, session) {
       filter(projeto %in% input$tipo,
              ano_apresentacao %in% input$data,
              !is.na(Grupo)) %>%
+      filter(projeto %nin% c('VT', 'VP', 'REQ', 'IND')) %>% 
       count(Grupo) %>% 
       mutate(prop = round(n*100/sum(n), 1)) %>% 
       e_charts(Grupo) %>% 
@@ -183,8 +184,8 @@ server <- function(input, output, session) {
   # 2.3 dados materias ----
   output$dados <- renderDT({
     sapl_data %>% 
-      # filter(projeto %in% input$tipo,
-      #        ano_apresentacao %in% input$data) %>% 
+      filter(projeto %in% input$tipo,
+             ano_apresentacao %in% input$data) %>%
       select(num_projeto, autor, ementa, data, localizacao_atual, status) %>% 
       #mutate(data = dmy(format(data, '%d/%m/%y'))) %>% 
       datatable(rownames = FALSE, 
@@ -235,7 +236,7 @@ server <- function(input, output, session) {
   output$dados_sessoes <- renderDT({
     dados_sessoes %>% 
       # filter(projeto %in% input$tipo,
-      #        ano_apresentacao %in% input$data) %>% 
+      #        ano_apresentacao %in% input$data) %>%
       select(nome_sessao, data_sessao, mes, ano) %>% 
       mutate(data_sessao = as.Date(data_sessao, '%d/%m/%y'),
              mes = month(data_sessao, label = TRUE, abbr = FALSE)) %>% 

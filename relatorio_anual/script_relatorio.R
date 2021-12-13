@@ -8,21 +8,6 @@ library(Hmisc)
 
 loadfonts(device = 'win')
 
-files <- list.files(path = 'data/', pattern = '.rds', full.names = TRUE)
-sapl_data <- do.call("bind_rows", lapply(files, readRDS)) 
-agrupamento_status <- read.table('agrupamento_status.txt', sep = '\t', header = TRUE) %>% as_tibble()
-
-inner_join(sapl_data, agrupamento_status, by = 'status')
-sapl_data$Grupo <- recode_factor(as.factor(sapl_data$Grupo),
-                                 '1' = 'Proposição Aprovada',
-                                 '2' = 'Proposição Rejeitada',
-                                 '3' = 'Em tramitação',
-                                 '4' = 'Proposição Arquivada',
-                                 'NA' = 'NA')
-
-sapl_data <- as_tibble(sapl_data)
-
-
 # materias por ano
 ggsave('testjpeg.jpg', width = 10, height = 6)
 sapl_data %>% 

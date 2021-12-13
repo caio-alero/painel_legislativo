@@ -125,7 +125,13 @@ sapl_scrap <- function(URL, uma_pagina = FALSE) {
                              gsub('Data Da Última Tramitação.*', '\\1', resultados),
                              resultados)
     
-    resultado[[i]] <- str_remove_all(resultados, 'Texto Original') %>% str_trim()
+    resultados <- ifelse(str_detect(resultados, 'Texto Original'),
+                         gsub('Texto Original.*', '\\1', resultados),
+                         resultados) %>% str_trim()
+    
+    resultado[[i]] <- ifelse(str_detect(resultados, 'Norma Jurídica'),
+                             gsub('Norma Jurídica.*', '\\1', resultados),
+                             resultados) %>% str_trim()
     
     print(i)
     
@@ -144,35 +150,42 @@ sapl_scrap <- function(URL, uma_pagina = FALSE) {
 }
 
 tempo_inicial <- Sys.time()
-dados_ws <- sapl_scrap(URL = str_replace_all(string = 'https://sapl.al.ro.leg.br/materia/pesquisar-materia?page=PAGE&tipo=&ementa=&numero=&numeracao__numero_materia=&numero_protocolo=&ano=&o=&tipo_listagem=1&tipo_origem_externa=&numero_origem_externa=&ano_origem_externa=&data_origem_externa_0=&data_origem_externa_1=&local_origem_externa=&data_apresentacao_0=01%2F01%2FAAAA&data_apresentacao_1=31%2F12%2FAAAA&data_publicacao_0=&data_publicacao_1=&autoria__autor=&autoria__primeiro_autor=unknown&autoria__autor__tipo=&autoria__autor__parlamentar_set__filiacao__partido=&relatoria__parlamentar_id=&em_tramitacao=&tramitacao__unidade_tramitacao_destino=&tramitacao__status=&materiaassunto__assunto=&indexacao=', 
-                                          pattern = 'AAAA', replacement = '2018'))
-Sys.time() - tempo_inicial
 
-# tratamento dos dados ----
-for(i in 1: nrow(dados_ws)) {
-  if(grepl('PLO', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PLO' 
-  if(grepl('PLC', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PLC'
-  if(grepl('PRE', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PRE'
-  if(grepl('PEC', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PEC'
-  if(grepl('VT', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'VT'
-  if(grepl('VP', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'VP'
-  if(grepl('IND', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'IND'
-  if(grepl('REQ', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'REQ'
-  if(grepl('ECM', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'ECM'
-  if(grepl('PDL', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PDL'
-  if(grepl('CEDP', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'CEDP'
+for(ano in 2021:2021){
+  dados_ws <- sapl_scrap(URL = str_replace_all(string = 'https://sapl.al.ro.leg.br/materia/pesquisar-materia?page=PAGE&tipo=&ementa=&numero=&numeracao__numero_materia=&numero_protocolo=&ano=&o=&tipo_listagem=1&tipo_origem_externa=&numero_origem_externa=&ano_origem_externa=&data_origem_externa_0=&data_origem_externa_1=&local_origem_externa=&data_apresentacao_0=01%2F01%2FAAAA&data_apresentacao_1=31%2F12%2FAAAA&data_publicacao_0=&data_publicacao_1=&autoria__autor=&autoria__primeiro_autor=unknown&autoria__autor__tipo=&autoria__autor__parlamentar_set__filiacao__partido=&relatoria__parlamentar_id=&em_tramitacao=&tramitacao__unidade_tramitacao_destino=&tramitacao__status=&materiaassunto__assunto=&indexacao=', 
+                                               pattern = 'AAAA', replacement = as.character(ano)))
+  
+  # tratamento dos dados ----
+  for(i in 1: nrow(dados_ws)) {
+    if(grepl('PLO', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PLO' 
+    if(grepl('PLC', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PLC'
+    if(grepl('PRE', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PRE'
+    if(grepl('PEC', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PEC'
+    if(grepl('VT', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'VT'
+    if(grepl('VP', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'VP'
+    if(grepl('IND', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'IND'
+    if(grepl('REQ', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'REQ'
+    if(grepl('ECM', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'ECM'
+    if(grepl('PDL', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'PDL'
+    if(grepl('CEDP', as.character(dados_ws$num_projeto[i]), fixed = TRUE)) dados_ws$projeto[i] <- 'CEDP'
+  }
+  
+  dados_ws$data <- gsub(' De ', '', dados_ws$data_apresentacao) %>% 
+    strptime(format = '%d %B %Y')
+  
+  dados_ws <- dados_ws %>% 
+    mutate(num_projeto = gsub('\\-.*', '', num_projeto),
+           data_apresentacao = format(lubridate::dmy(data_apresentacao), '%d/%m/%Y'),
+           mes_apresentacao = lubridate::month(data_apresentacao, label = TRUE, abbr = TRUE),
+           ano_apresentacao = as.character(substring(data_apresentacao, 7, 11)),
+           num_projeto = str_trim(num_projeto, side = 'right'))
+  
+  saveRDS(dados_ws, file = str_replace('data/saplAAAA.rds', 'AAAA', as.character(ano)))
+  
 }
 
-dados_ws$data <- gsub(' De ', '', dados_ws$data_apresentacao) %>% 
-  strptime(format = '%d %B %Y')
+Sys.time() - tempo_inicial
 
-dados_ws <- dados_ws %>% 
-  mutate(num_projeto = gsub('\\-.*', '', num_projeto),
-         data_apresentacao = format(lubridate::dmy(data_apresentacao), '%d/%m/%Y'),
-         mes_apresentacao = lubridate::month(data_apresentacao, label = TRUE, abbr = TRUE),
-         ano_apresentacao = as.character(substring(data_apresentacao, 7, 11)),
-         num_projeto = str_trim(num_projeto, side = 'right'))
 
-saveRDS(dados_ws, file = 'data/sapl2018.rds')
 
 
