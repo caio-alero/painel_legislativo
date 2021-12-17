@@ -52,7 +52,7 @@ dev.off()
 
 sapl_data %>% 
   filter(ano_apresentacao == 2021) %>% 
-  count(Grupo, projeto)
+  count(projeto)
 
 
 dados_sessoes %>% 
