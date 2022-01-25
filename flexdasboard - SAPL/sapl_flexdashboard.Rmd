@@ -20,16 +20,16 @@ e_theme_register('{"color":["#0791b7","#dad944","#cccccc", "#fb5057","#47c1ff","
 
 files <- list.files(path = 'data/', pattern = '.rds', full.names = TRUE)
 sapl_data <- do.call("bind_rows", lapply(files, readRDS)) 
-agrupamento_status <- read.table('agrupamento_status.txt', sep = '\t', header = TRUE, encoding = 'UTF-8') %>% as_tibble()
+#agrupamento_status <- read.table('agrupamento_status.txt', sep = '\t', header = TRUE, encoding = 'UTF-8') %>% as_tibble()
 
-sapl_data <- inner_join(agrupamento_status, sapl_data, by = 'status')
+#sapl_data <- inner_join(agrupamento_status, sapl_data, by = 'status')
 
-sapl_data$Grupo <- recode_factor(as.factor(sapl_data$Grupo),
-                                 '1' = 'Proposição Aprovada',
-                                 '2' = 'Proposição Rejeitada',
-                                 '3' = 'Em tramitação',
-                                 '4' = 'Proposição Arquivada',
-                                 'NA' = 'NA')
+#sapl_data$Grupo <- recode_factor(as.factor(sapl_data$Grupo),
+#                                 '1' = 'Proposição Aprovada',
+#                                 '2' = 'Proposição Rejeitada',
+#                                 '3' = 'Em tramitação',
+#                                 '4' = 'Proposição Arquivada',
+#                                 'NA' = 'NA')
 ```
 
 
