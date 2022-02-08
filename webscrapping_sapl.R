@@ -187,5 +187,7 @@ for(ano in 2021:2021){
 Sys.time() - tempo_inicial
 
 
+files <- list.files(path = 'data/', pattern = '.rds', full.names = TRUE)
+sapl_data <- do.call("bind_rows", lapply(files, readRDS)) 
 
-
+write.table(sapl_data, 'dados_completos_SAPL.txt', sep = '\t', row.names = FALSE, quote = FALSE)
