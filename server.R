@@ -134,14 +134,14 @@ server <- function(input, output, session) {
       filter(!is.na(autor)) %>% 
       mutate(poder = NA) -> tabela_autoria
     
-    for(i in 1:nrow(tabela_autoria)) {
-      if(str_detect(tabela_autoria$autor[i], 'Defensoria Pública')) tabela_autoria[i, 'poder'] <- 'DPE'
-      if(str_detect(tabela_autoria$autor[i], 'Tribunal De Contas')) tabela_autoria[i, 'poder'] <- 'TCE'
-      if(str_detect(tabela_autoria$autor[i], 'Tribunal De Justiça')) tabela_autoria[i, 'poder'] <- 'Judiciário'
-      if(str_detect(tabela_autoria$autor[i], 'Executivo')) tabela_autoria[i, 'poder'] <- 'Executivo'
-    }  
     
-    tabela_autoria$poder[is.na(tabela_autoria$poder)] <- 'Legislativo'
+    tabela_autoria %>% 
+      mutate(poder = case_when(str_detect(autor, 'Defensoria Pública') ~ 'Defensoria Pública',
+                               str_detect(autor, 'Tribunal De Contas') ~ 'Tribunal de Contas',
+                               str_detect(autor, 'Tribunal De Justiça') ~ 'Tribunal de Justiça',
+                               str_detect(autor, 'Executivo') ~ 'Executivo',
+                               is.na(poder) ~ 'Legislativo'))
+    
     tabela_autoria <- tabela_autoria %>% 
       as_tibble() %>% 
       rename(name = autor, value = n)
