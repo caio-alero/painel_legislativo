@@ -4,6 +4,7 @@ library(stringr)    # manipular os textos
 library(xml2)       # ler html
 library(jbkmisc)
 library(tm)
+library(jbkmisc)
 
 # o código de scrape a seguir serve tanto para PLO como PLC
 # tipos de materia: PLO, PLC, VP
@@ -151,7 +152,7 @@ sapl_scrap <- function(URL, uma_pagina = FALSE) {
 
 tempo_inicial <- Sys.time()
 
-for(ano in 2021:2021){
+for(ano in 2022:2022){
   dados_ws <- sapl_scrap(URL = str_replace_all(string = 'https://sapl.al.ro.leg.br/materia/pesquisar-materia?page=PAGE&tipo=&ementa=&numero=&numeracao__numero_materia=&numero_protocolo=&ano=&o=&tipo_listagem=1&tipo_origem_externa=&numero_origem_externa=&ano_origem_externa=&data_origem_externa_0=&data_origem_externa_1=&local_origem_externa=&data_apresentacao_0=01%2F01%2FAAAA&data_apresentacao_1=31%2F12%2FAAAA&data_publicacao_0=&data_publicacao_1=&autoria__autor=&autoria__primeiro_autor=unknown&autoria__autor__tipo=&autoria__autor__parlamentar_set__filiacao__partido=&relatoria__parlamentar_id=&em_tramitacao=&tramitacao__unidade_tramitacao_destino=&tramitacao__status=&materiaassunto__assunto=&indexacao=', 
                                                pattern = 'AAAA', replacement = as.character(ano)))
   
@@ -188,6 +189,8 @@ Sys.time() - tempo_inicial
 
 
 files <- list.files(path = 'data/', pattern = '.rds', full.names = TRUE)
-sapl_data <- do.call("bind_rows", lapply(files, readRDS)) 
+dados_sapl <- do.call("bind_rows", lapply(files, readRDS)) 
 
-write.table(sapl_data, 'dados_completos_SAPL.txt', sep = '\t', row.names = FALSE, quote = FALSE)
+write.table(dados_sapl, 'dados_sapl.txt', sep = '\t', row.names = FALSE, quote = FALSE)
+
+dados_sapl %>% View()
