@@ -6,11 +6,9 @@ library(jbkmisc)
 library(tm)
 library(jbkmisc)
 
-# o código de scrape a seguir serve tanto para PLO como PLC
-# tipos de materia: PLO, PLC, VP
-# uma_pagina = TRUE ou FALSE
 
-#sapl_scrap <- function(URL, tipo_materia = NULL, uma_pagina = FALSE) {
+# 1. FUNÇÃO DE SCRAPE----
+
 sapl_scrap <- function(URL, uma_pagina = FALSE) {
 
   # extraindo o numero total de paginas
@@ -188,9 +186,20 @@ for(ano in 2022:2022){
 Sys.time() - tempo_inicial
 
 
+
+# 3. COMPILANDO E SALVANDO DADOS ----
+
 files <- list.files(path = 'data/', pattern = '.rds', full.names = TRUE)
 dados_sapl <- do.call("bind_rows", lapply(files, readRDS)) 
 
-write.table(dados_sapl, 'dados_sapl.txt', sep = '\t', row.names = FALSE, quote = FALSE)
 
-dados_sapl %>% View()
+dados_sapl <- dados_sapl %>% 
+  mutate(autoria_poder = case_when(str_detect(autor, 'Defensoria Pública') ~ 'Defensoria Pública',
+                           str_detect(autor, 'Tribunal De Contas') ~ 'Tribunal de Contas',
+                           str_detect(autor, 'Tribunal De Justiça') ~ 'Tribunal de Justiça',
+                           str_detect(autor, 'Ministério Público') ~ 'Ministério Público',
+                           str_detect(autor, 'Executivo') ~ 'Poder Executivo')) %>% 
+  mutate(autoria_poder = ifelse(is.na(autoria_poder), 'Poder Legislativo', autoria_poder))
+
+
+write.table(dados_sapl, 'dados_sapl.txt', sep = '\t', row.names = FALSE, quote = FALSE)
